@@ -153,21 +153,16 @@ as the marker structure of the found marker; the layout of the sequence’s head
 is the same as the layout of the found marker; and the found marker occurs on a line whose
 number is greater than the line number of the sequence’s head marker. In other words,
 this backward-chaining rule is written as follows:</p>
-        <p>(<= (extends ?m ?s)</p>
-        <P>(head-marker ?m1 ?s)</P>
-         <p>(same-marker-structure ?m1 ?m)</p>
-        <p>(same-layout ?m1 ?m)</p>
-        <p>(occurs-on-line ?m ?ln)</p>
-        <p>(occurs-on-line ?m1 ?ln1)</p>
-        <p>(< ?ln1 ?ln))</p>
-    
-        <p>The <= sign that starts the rule states that this is a backward-chaining rule. All
+        <img src="C:\Users\koppa\OneDrive\Pictures\Screenshot 4.png">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The  sign that starts the rule states that this is a backward-chaining rule. All
 backward-chaining rules have one consequent and at least one antecedent. Each
-backward-chaining rule has the following syntax: (<= <conseq> <ante1> … <ante-n>).
+backward-chaining rule has the following syntax
 The semantics of a backward-chaining rule are that in order to show that the consequent
 is true, it must be shown that each antecedent is true. The forward-chaining rules are
             defined in a similar fashion, except that inference proceeds from antecedents to consequents. Each forward-chaining rule has at most one antecedent and at least one</p>
-            </body>
+            </C>
+        </p>
+    </body>
      </html>
         
         
