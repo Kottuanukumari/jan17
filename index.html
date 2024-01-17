@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width device-width,intial-scale=0.1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div>
+            </div>
+        <p style="text-align:right;">(286-290)pages</p>
+        <ul style="text-align:start";></ul>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;if it were possible to segment free text into sentences, simplistic regular expression
+approaches are too noisy to be useful (Kulyukin, Hammond, & Burke, 1996).</p>
+        <h1>Exploiting Regularities in FAQ Structure</h1>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;Finding Q&A’s would be a serious obstacle, were it not for the fact that FAQs are
+structured free texts. Consider, for example, the following excerpt from the caffeine FAQ
+given in Figure 2.
+        </p>
+        <p>The experts who wrote this FAQ used several lexical cues to mark each Q&A. Each
+question is marked with two Arabic numerals separated by a dot and followed by a right
+parenthesis, e.g., “1.2).” Each answer is separated from its question with another lexical
+cue, i.e., a line of hyphens. We refer to such cues as lexical markers or simply as markers.
+We have compiled the following list of the most frequent marker types found in FAQs:</p>
+        <li><b>Alpha Markers</b>.For example, “Q:”, “A:”, “Subject:”, “Section:”</li>
+        <li><b>Alphanumeric Markers</b>. For example, “[1-0]”, “1)”, “10.2a”, “VIII.”</li>
+        <li><b>Symbolic Markers</b>. For example, “***********”, “==============”</li>
+        <p>Figure 2: A sample from a FAQ about caffeine</p>
+        <img src="C:\Users\koppa\OneDrive\Pictures\screenshot 1.png">
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Lexical markers are used to introduce structural regularity into FAQs. Structural
+regularities benefit the experts, i.e., FAQ writers, because they enable easy and fast
+maintenance of online expertise. They benefit the FAQ readers, because they help them
+find the needed content quickly</p>
+    <h2>Marker Sequences</h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;Lexical markers arrange themselves into marker sequences. For example, “1.1),
+1.2)’” is a sequence of two alphanumeric markers, i.e., markers that contain both numbers
+and characters. The last marker of a sequence is referred to as its head marker. An empty
+sequence has an empty head marker. When a new marker is added to a sequence, the
+sequence’s head marker is said to be extended by the added marker. For example, the head
+marker of “1.1), 1.2),” which is “1.2),” can be extended on “1.3).”</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The presence of these sequences suggests a way to build a FAQ parsing system
+to mine the free texts of FAQs for structural components, i.e., question-answer pairs,
+</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;tables of contents, and bibliographies. The parser spots marker sequences that point to
+structural components and tracks the sequences in the FAQ’s text, labeling the elements
+of the component along the way. The advantage of this approach is that mining for
+Q&A’s requires no deep natural language processing (NLP), which is known to be a very
+hard task (Allen, 1987). All the parser needs to know is how the marker sequences behave
+in the FAQs</p>
+        <h3>Tracking Marker Sequences</h3>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;An analysis of FAQs reveals that marker sequences obey a small number of
+constraints. The presence of such constraints is implied by the four assumptions stated
+in the introduction section. Since FAQ writers are interested in spreading their knowl-edge, they make sure that the knowledge is packaged in an easily digestible format. The
+constraints that we have found are as follows:</p>
+        <li><b>Lack of recursion</b>. Alphanumeric marker sequences do not recurse.</li>
+        <li><b>Fixed marker structure</b>. The structure of markers in a sequence remains the same.</li>
+        <li><b>Lack of criss-crossing</b>. A sequence does not cross another sequence if the latter
+has started before the former. This constraint applies only to symbolic sequences.</li>
+        <li><b>Proximity</b>. When two different sequences with the same marker structure can be
+extended on the same marker, only the sequence whose head marker is closer to the
+predicted marker is allowed to extend on it.</li>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;As an example of the non-recursiveness of marker sequences, consider the follow-ing pattern that occurs in numerous FAQs: “[1] ...[2] ... [N] ... [1] ...” The el-lipses stand for pieces of free text. Since marker sequences do not recurse, the FAQ parser
+knows that a new sequence is started when it sees the second “[1].” This constraint
+enables the parser to determine when the FAQ’s table of contents ends and the actual
+Q&A sequence begins.
+</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;As an example of the fixed marker structure constraint, consider “I) ... II) ... III) ...
+[4] ... IV) ...” When the parser detects “I),” it knows that the other markers of the sequence
+will have the same structure, i.e., a Roman numeral followed by a right parenthesis. Hence,
+it ignores “[4]” as belonging to another sequence or occurring as part of free text. The
+stability of marker structure allows the parser to track marker sequences in FAQs.</p>
+        
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;Another example of the fixed marker structure constraint is given in Figure 4, where
+the tab character is made visible. The parser ignores the first “<C>” marker, because it
+is not preceded by two tab characters, as are the other markers of the sequence. In other
+words, the two tabs that constitute the layout of the sequence allow us to
+ignore the first "<C>" marker as belonging to another sequence.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;As an example of the criss-crossing constraint, consider the sequences in Figure
+3. Here the crossing constraint forces the third “-” marker from above to start a new
+sequence, i.e., seq3. If it belonged to seq2, seq2 would have to cross seq1, which the
+constraint does not allow.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The proximity constraint simply says that the sequence always extends on the
+marker closest to its head marker.
+</p>
+        <h4>Logical Map and Layout</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;FAQ writers frequently use markers in conjunction with layout. One way to compute
+the layout of a document is to digitize its text line by line according to a simple encoding
+scheme. The encoding scheme implemented in FAQ Minder treats each line of a document
+as a string. Each substring of the string is mapped into the integer denoting its length.
+The special layout characters like newline, tab, and space are mapped into the integers
+1000, 2000, and 3000, respectively. This scheme works well, because all FAQs in our
+library have lines that are at most 100 characters long. Since the scheme uses only
+integers, it can be easily adjusted to other document formats with more characters per
+line.
+</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The database of assertions about sequences detected in the text of a document is
+referred to as the logical map of the document. The presentation pattern of a document
+is determined by its logical map and its layout. As an example, consider the following
+chunk of text with the layout characters made visible given in Figure 5. The layout of the
+above text computed according to the above scheme is given in Figure 6. Part of the
+logical map of that text is offered in Figure 7. The symbols lsb, rsb and hphn stand for</p>
+        <img src="C:\Users\koppa\OneDrive\Pictures\screenshot2.png">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;left square bracket, right square bracket, and hyphen, respectively. The predicates used
+have the following semantics. The predicate (alphanum-sequence s) states that s is an
+alphanumeric sequence. The predicate (marker m s) states that m is a marker in a sequence
+s. The predicate (occurs-on-line m n) states that a marker m occurs on line number n.
+Finally, the predicate (component m c n) states that c is the n-th component of a marker
+m.
+</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;These databases are treated as sets of First-Order Predicate Calculus (FOPC)
+assertions. This format makes it straightforward to apply standard pattern matching and
+inference techniques well known in the Artificial Intelligence community (Norvig, 1992).</p>
+        <h4>How FAQ Minder Works</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;FAQ Minder works in two modes: supervised and unsupervised. In the unsupervised mode, the system takes as input the text of a FAQ and mines it for structure on its
+own. The system deals with tables of contents, questions and answers, and bibliogra-phies. Network headers and glossaries found at the beginning of many FAQs are not
+currently dealt with, because the current version of FAQ Finder does not utilize them
+during answer retrieval. In the supervised mode, FAQ Minder identifies the logical
+structure of a FAQ by interacting with the user through a set of simple interfaces.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;Figure 8 shows FAQ Minder’s architecture. The system consists of three modules:
+the sequence manager, the inference engine, and the tagger. The sequence manager
+reads the text of a document, builds its layout, and activates and deactivates marker
+sequences. The inference engine manages the logical map and the constraint satisfac-tion. The operation of the inference engine is based on a set of forward-chaining and
+backward-chaining rules (Norvig, 1992) about the logical structure of documents and</p>
+        <p>Figure 8: FAQ Minder’s architecture.</p>
+        <img src="C:\Users\koppa\OneDrive\Pictures\Screenshot 3.png">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;marker constraints. Old rules are adjusted and new rules are added as needed. Thus,
+documents from new domains can be processed by the system as long as the constraints
+are encoded as rules.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The tagger inserts tags into the text of the document given the document’s layout
+and logical map. The current tag set consists of six tags: “:QUE,” “:ANS,” “:TOC,” “:TOCITEM,” “:BIB,” “:BIB-ITEM.” The “:QUE” tag is put at the beginning and the end of a
+question. The “:ANS” tag is put at the beginning and end of an answer. The “:TOC” tag
+is put at the beginning and end of a table of contents. The “:TOC-ITEM” is put at the
+beginning and end of an item in the table of contents. The “:BIB” and “:BIB-ITEM” tags
+are used in the same fashion for bibliographies. To prevent any possibility of symbol
+clashes, the tags are extended with randomly generated sequences of characters and
+numbers, e.g., “:QUE-a12b34.” Once such a sequence is generated, it is appended at the
+end of each tag used in a given FAQ.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;FAQs are read line by line. After a line is read, the sequence manager computes its
+layout, adds it to the document layout, and gives the currently active marker sequence
+a chance to examine the contents of the line. The manager distinguishes two types of
+marker sequences: active and inactive. An active sequence is started when a marker is
+recognized in the text. A sequence remains active as long as any markers found in the
+read line can extend it. When no found marker can extend the active sequence, it becomes
+inactive. Thus, there can be at most one active sequence, but potentially many inactive
+sequences.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;The inference engine is used heavily by the sequence manager in deciding whether
+the currently active sequence can be extended on a marker found in the current line. To
+allow a marker to extend the active sequence, the marker and the sequence must satisfy
+at least one rule governing extension. For example, one of the backward-chaining
+sequence extension rules states that a marker extends a sequence if all of the following
+conditions are satisfied: the marker structure of the sequence’s head marker is the same
+as the marker structure of the found marker; the layout of the sequence’s head marker
+is the same as the layout of the found marker; and the found marker occurs on a line whose
+number is greater than the line number of the sequence’s head marker. In other words,
+this backward-chaining rule is written as follows:</p>
+        <p>(<= (extends ?m ?s)</p>
+        <P>(head-marker ?m1 ?s)</P>
+         <p>(same-marker-structure ?m1 ?m)</p>
+        <p>(same-layout ?m1 ?m)</p>
+        <p>(occurs-on-line ?m ?ln)</p>
+        <p>(occurs-on-line ?m1 ?ln1)</p>
+        <p>(< ?ln1 ?ln))</p>
+    
+        <p>The <= sign that starts the rule states that this is a backward-chaining rule. All
+backward-chaining rules have one consequent and at least one antecedent. Each
+backward-chaining rule has the following syntax: (<= <conseq> <ante1> … <ante-n>).
+The semantics of a backward-chaining rule are that in order to show that the consequent
+is true, it must be shown that each antecedent is true. The forward-chaining rules are
+            defined in a similar fashion, except that inference proceeds from antecedents to consequents. Each forward-chaining rule has at most one antecedent and at least one</p>
+            </body>
+     </html>
+        
+        
+
+        
+        
